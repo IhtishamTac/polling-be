@@ -39,5 +39,27 @@ class DatabaseSeeder extends Seeder
         $user -> division_id = 1;
         $user -> save();
 
+        $user = new User();
+        $user -> username = 'user1';
+        $user -> password = bcrypt('user1');
+        $user -> role = 'user';
+        $user -> division_id = 1;
+        $user -> save();
+
+        $user = new User();
+        $user -> username = 'user2';
+        $user -> password = bcrypt('user2');
+        $user -> role = 'user';
+        $user -> division_id = 1;
+        $user -> save();
+
+        $user = new User();
+        $user -> username = 'user3';
+        $user -> password = bcrypt('user3');
+        $user -> role = 'user';
+        $user -> division_id = 1;
+        $user -> save();
+
+
     }
 }

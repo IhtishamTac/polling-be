@@ -86,7 +86,7 @@ class PollController extends Controller
 
     public function getAllPoll()
     {
-        $polls = Poll::all();
+        $polls = Poll::latest()->get();
         $data = array();
         foreach ($polls as $poll){
             $voted = Vote::where(['user_id' => Auth::id(), 'poll_id' => $poll->id])->first();
@@ -119,15 +119,14 @@ class PollController extends Controller
     {
         $polls = Poll::where('id', $poll_id);
         if(auth()->user()->role == 'admin'){
-            $polls->with('choices_id')->delete();
+            if($polls->delete()){
 
-            return response()->json([
-                'message' => 'Successfully deleted'
-            ], 200);
-
-        }else{
-            return response()->json(['message' => 'Something wrong'], 401);
+                return response()->json([
+                    'message' => 'Successfully deleted'
+                ], 200);
+            }
         }
+        return response()->json(['message' => 'Something wrong'], 401);
     }
 
     public function vote($poll_id, $choice_id)
@@ -145,7 +144,7 @@ class PollController extends Controller
                 return response()->json([
                     'message' => 'already voted'
                 ], 422);
-            }elseif($poll->deadline < Carbon::now()){
+            }elseif($poll->deadline > Carbon::now()){
                 return response()->json([
                     'message' => 'voting deadline',
                 ], 422);
